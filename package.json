@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository" :{ 
     "type" : "git", 
-    "url" : "https://github.com/AceITsro/rbacc.git"
+    "url" : "https://github.com/aceitsro/rbacc.git"
   },
   "scripts": {
     "test": "node test.js"
