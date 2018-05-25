@@ -1,0 +1,24 @@
+{
+  "name": "rbacc",
+  "version": "1.0.0",
+  "description": "rbac with custom user resources",
+  "main": "index.js",
+  "repository" :{ 
+    "type" : "git", 
+    "url" : "https://github.com/AceITsro/rbacc.git"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "rbac",
+    "acl",
+    "custom"
+  ],
+  "author": "AceITsro",
+  "license": "ISC",
+  "dependencies": {
+    "memory-cache": "^0.2.0",
+    "redis": "^2.8.0"
+  }
+}
