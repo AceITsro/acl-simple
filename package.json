@@ -1,7 +1,7 @@
 {
   "name": "rbacc",
   "version": "1.0.0",
-  "description": "rbac with custom user resources",
+  "description": "simple rbac with custom user resources and redis backend",
   "main": "index.js",
   "repository" :{ 
     "type" : "git", 
@@ -15,7 +15,11 @@
     "acl",
     "custom"
   ],
-  "author": "AceITsro",
+  "bugs":{ 
+    "url" : "https://github.com/aceitsro/rbacc/issues", 
+    "email" : "horky@aceit.cz"
+  },
+  "author": "aceitsro",
   "license": "ISC",
   "dependencies": {
     "memory-cache": "^0.2.0",
