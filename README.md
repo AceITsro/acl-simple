@@ -1,2 +1,2 @@
 # rbacc
-simple acl with custom user resources
+simple rbac with custom user resources
