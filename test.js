@@ -8,7 +8,7 @@ const Rbacc=require("./rbacc");
         client:{
             host:"localhost",
             port:6379,
-            prefix:"myrbacc:"
+            prefix:"rbacc:"
         }
     })
 
@@ -19,7 +19,8 @@ const Rbacc=require("./rbacc");
             },
             "user":{
                 "/files/public":"*",
-                "/blog/post":["read","write"]
+                "/blog/post":["read","write"],
+                "/files/userDir/*":"*",
             },
             "guest":{
                 "/files/public":"read",
@@ -67,9 +68,22 @@ const Rbacc=require("./rbacc");
                                          return console.log(err);
                                      }
                                      console.log("/blog/post:write - ",res);
+
+                                     rbacc.isAllowed({
+                                        userId:"userId",
+                                        resource:"/files/userDir/584ds215fe812/data",
+                                        premision:"read",
+                                        cb:(err,res)=>{
+                                             if (err) {
+                                                 return console.log(err);
+                                             }
+                                             console.log("/files/userDir/584ds215fe812/data:read - ",res);
+                                         }
+                                    })
+
                                  }
                             })
-                            
+
                          }
                     })
 

@@ -364,21 +364,37 @@ class Rbacc{
         })
     }
 
+    checkPremission({premisions=[],premision}){
+        if (premisions.includes('*') || premisions.includes(premision)) {
+            return true
+        }
+    }
+
     _isAllowed({user,resource,premision}){
         if (user['*']) {
-            let p=user['*'];
-            if (p.includes('*') || p.includes(premision)) {
-                return true
-            }
+            return this.checkPremission({
+                premisions:user['*'],
+                premision,
+            })
         }
 
         if (user[resource]) {
-            let p=user[resource];
-            if (p.includes('*') || p.includes(premision)) {
+            return this.checkPremission({
+                premisions:user[resource],
+                premision,
+            })
+        }
+
+        let resources=Object.keys(user) || [];
+
+        for(let r of resources){
+            if (r.substr(r.length - 1)==="*" && 
+                resource.substr(0,r.length - 2)===r.substr(0,r.length - 2)
+            ) {
                 return true
             }
         }
-
+      
         return false
     }
 
