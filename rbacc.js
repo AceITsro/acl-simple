@@ -31,56 +31,29 @@ class Rbacc{
         }
     }
 
-    encode(obj){
-        return JSON.stringify(obj)
-    }
-
-    decode(s){
-        try {
-            return JSON.parse(s) || {}
-        } catch (err) {
-            console.log(err);
-            return {}
-        }
-    }
-
-    _get(key,cb,cached){        
-        let value=cache.get(key)
-        if (value) {
+    _get(key,cb){        
+        this.client.get(key,(err,res)=>{
+                
+            if (err) {
+                return cb(err)
+            }
+            
+            let value
+            try {
+                value=JSON.parse(res===null ? "{}" : res)
+            } catch (err) {
+                return cb(err)
+            }
 
             if (this.debug) {
-                console.log("_get from cache:",key);   
+                console.log("_get db:",key);   
             }
-                        
-            return cb(null,value)
-        }else{
-            this.client.get(key,(err,res)=>{
-                
-                if (err) {
-                    return cb(err)
-                }
-                
-                let value
-                try {
-                    value=JSON.parse(res===null ? "{}" : res)
-                } catch (err) {
-                    throw cb(err)
-                }
 
-                if (this.debug) {
-                    console.log("_get db:",key,", will be added to cache:",cached);   
-                }
-
-                if (cached) {
-                    cache.put(key,value, this.cacheTTL);   
-                }
-
-                cb(null,value)
-            })
-        }
+            cb(null,value)
+        })
     }
 
-    _set(key,value,cb,cached){        
+    _set(key,value,cb){        
         try {
             this.client.set(key,JSON.stringify(value),(err,res)=>{
                 if (err) {
@@ -88,17 +61,13 @@ class Rbacc{
                 }
 
                 if (this.debug) {
-                    console.log("_set db:",key,", will be added to cache:",cached);   
-                }
-
-                if (cached) {
-                    cache.put(key,value, this.cacheTTL);   
+                    console.log("_set db:",key);   
                 }
 
                 cb(null,value)
             })
         } catch (err) {
-            cb(err)
+            return cb(err)
         }
     }
 
@@ -138,7 +107,7 @@ class Rbacc{
             }
 
             return cb(null,res)
-        },true)
+        })
     }
 
     removeResources({roleId,resources,cb}){
@@ -157,9 +126,9 @@ class Rbacc{
                 }
 
                 cb(null,role)
-            },true)
+            })
 
-        },false)
+        })
     }
 
     addResources({roleId,resources,overwriteResources,cb}){
@@ -175,7 +144,7 @@ class Rbacc{
                 }
 
                 cb(null,role)
-            },true)
+            })
         }else{
             this._get(roleId,(err,role)=>{
             
@@ -191,9 +160,9 @@ class Rbacc{
                     }
     
                     cb(null,role)
-                },true)
+                })
 
-            },false)
+            })
         }
         
     }
@@ -238,7 +207,7 @@ class Rbacc{
                                 reject(err)
                             }
                             resolve(res)
-                        },true)
+                        })
                     })
                 })(roleId)
             )
@@ -284,7 +253,7 @@ class Rbacc{
             
             this.addMergedResourcesToUser({user,cb})
 
-        },true)
+        })
     }
 
     saveUserAndReturn({userId,user,cb}){
@@ -301,12 +270,10 @@ class Rbacc{
                         return cb(err)
                     }
 
-                    cache.put(userId,_user, this.cacheTTL);
-
                     cb(null,_user)
                 }
             })
-        },false)
+        })
     }
 
     addUserResources({
@@ -362,7 +329,7 @@ class Rbacc{
             }
             
             this.saveUserAndReturn({userId,user,cb})
-        },false)
+        })
     }
 
     removeUserResources({
@@ -394,7 +361,7 @@ class Rbacc{
             
             this.saveUserAndReturn({userId,user,cb})
 
-        },false)
+        })
     }
 
     _isAllowed({user,resource,premision}){
