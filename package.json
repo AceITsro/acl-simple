@@ -1,6 +1,6 @@
 {
   "name": "rbacc",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "simple rbac with custom user resources and redis backend",
   "main": "index.js",
   "repository" :{ 
